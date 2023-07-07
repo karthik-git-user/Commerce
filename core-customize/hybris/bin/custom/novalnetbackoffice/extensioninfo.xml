@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
+
+    <extension abstractclassprefix="Generated" classprefix="Yacceleratorbackoffice" name="novalnetbackoffice"
+               usemaven="false">
+
+        <requires-extension name="acceleratorbackoffice"/>
+        <requires-extension name="novalnetcore"/>
+        <coremodule generated="true" manager="org.novalnetbackoffice.jalo.YacceleratorbackofficeManager"
+                    packageroot="org.novalnetbackoffice"/>
+
+        <meta key="backoffice-module" value="true"/>
+
+    </extension>
+
+</extensioninfo>

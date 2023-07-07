@@ -300,6 +300,13 @@
 	  <extension name= 'xyformsservices' />
 	  <extension name= 'xyformsstorefrontcommons' />
 	  <extension name= 'xyformsweb' />
+	  
+<!-- Novalnet Extensions --> 
+	  <extension name='novalnetcore' />
+	  <extension name='novalnetocc' />
+	  <extension name='novalnetfacades' />
+	  <extension name='novalnetbackoffice' />
+	  <extension name='novalnetcheckoutaddon' />
 
 
 <!-- Sample Custom Extensions -->

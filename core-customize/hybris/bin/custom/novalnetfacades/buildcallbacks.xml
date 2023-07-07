@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+    <project name="novalnetfacades_buildcallbacks">
+
+    <macrodef name="novalnetfacades_before_ear">
+        <sequential>
+
+        </sequential>
+    </macrodef>
+
+</project>
