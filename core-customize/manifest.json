@@ -103,7 +103,7 @@
         },
         {
             "addon":"novalnetcheckoutaddon",
-            "storefront":'yacceleratorstorefront",
+            "storefront":"yacceleratorstorefront",
             "template":"yacceleratorstorefront"
         }
     ],
