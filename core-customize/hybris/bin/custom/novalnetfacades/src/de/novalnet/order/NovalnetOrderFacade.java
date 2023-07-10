@@ -1104,7 +1104,7 @@ public class NovalnetOrderFacade {
         JSONObject transactionJson    = responseJson.getJSONObject("transaction");
         
         String testMode    = (transactionJson.get("test_mode").toString().equals("1")) ? Localization.getLocalizedString("novalnet.testOrderText") : "";
-        String paymentname = paymentDetailsJson.get("type").toString();
+        String paymentname = paymentDetailsJson.get("name").toString();
         
         if(transactionJson.has("bank_details")) {
             bankDetails += "";
