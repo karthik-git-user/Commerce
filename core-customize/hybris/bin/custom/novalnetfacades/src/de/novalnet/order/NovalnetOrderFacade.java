@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+//~ import de.hybris.platform.acceleratorstorefrontcommons.controllers.util.GlobalMessages;
+
 import de.hybris.platform.util.localization.Localization;
 import de.hybris.platform.jalo.JaloSession;
 import de.hybris.platform.commercewebservicescommons.errors.exceptions.RequestParameterException;
@@ -176,6 +178,7 @@ public class NovalnetOrderFacade {
     public static final int TOTAL_HOURS = 24;
     public static final int TOTAL_MINUTES_SECONDS = 60;
     public static final int AGE_REQUIREMENT = 18;
+    
 
     @Resource(name = "i18NFacade")
     private I18NFacade i18NFacade;
@@ -796,10 +799,12 @@ public class NovalnetOrderFacade {
         
         transactionParameters.put("currency", currency);
         transactionParameters.put("amount", orderAmountCent);
-        transactionParameters.put("system_name", "SAP Commerce Cloud");
-        transactionParameters.put("system_version", "2211-NN2.0.0");
+        transactionParameters.put("system_name", "SAP_Commerce_Cloud");
+        transactionParameters.put("system_version", "2211-NN2.0.0-NNTyacceleratorstorefront");
         
         if (!"paymentForm".equals(paymentData)) {
+            
+            transactionParameters.put("system_version", "2211-NN2.0.0");
             
             final Map<String, Object> paymentDataParameters = new HashMap<String, Object>();
             
@@ -818,13 +823,18 @@ public class NovalnetOrderFacade {
                 if (paymentDetails.has("process_mode") && paymentDetails.get("process_mode").toString().equals("redirect")) {
                     transactionParameters.put("payment_type", paymentDetails.get("type").toString());
                     if (request.isPresent()) {
-						HttpServletRequest httpRequest = request.get();
-						currentUrl = httpRequest.getRequestURL().toString();
-						returnUrl  = currentUrl.replace("summary/placeOrder", "hop-response");
-					}
-					
-					transactionParameters.put("return_url", returnUrl);
-					transactionParameters.put("error_return_url", returnUrl);
+                        HttpServletRequest httpRequest = request.get();
+                        currentUrl = httpRequest.getRequestURL().toString();
+                        
+                        if (currentUrl.contains("summary/placeOrder")) {
+							returnUrl  = currentUrl.replace("summary/placeOrder", "hop-response");
+						} else {
+							returnUrl  = currentUrl.replace("select-payment-method/add", "hop-response");
+						}
+                    }
+                    
+                    transactionParameters.put("return_url", returnUrl);
+                    transactionParameters.put("error_return_url", returnUrl);
                 }
                 getSessionService().setAttribute("novalnetProcessMode", paymentDetails.get("process_mode").toString());
             }
@@ -927,30 +937,30 @@ public class NovalnetOrderFacade {
         //~ customerParameters.put("last_name", addressData.getLastName());
         //~ customerParameters.put("email", emailAddress);
         
-		 return getSessionService().getAttribute("novalnetAddressData");
+         return getSessionService().getAttribute("novalnetAddressData");
         
-			//~ billingParameters.put("street", addressData.getLine1() + " " + addressData.getLine2());
-			//~ billingParameters.put("city", addressData.getTown());
-			//~ billingParameters.put("zip", addressData.getPostalCode());
-			//~ billingParameters.put("country_code", addressData.getCountry().getIsocode());
+            //~ billingParameters.put("street", addressData.getLine1() + " " + addressData.getLine2());
+            //~ billingParameters.put("city", addressData.getTown());
+            //~ billingParameters.put("zip", addressData.getPostalCode());
+            //~ billingParameters.put("country_code", addressData.getCountry().getIsocode());
         
-			//~ shippingParameters.put("same_as_billing", 1);
-			
-		
-			
-			//~ AddressData billingAddress = getSessionService().getAttribute("novalnetAddressdata");
-			
-			//~ billingParameters.put("street", billingAddress.getLine1() + " " + billingAddress.getLine2());
-			//~ billingParameters.put("city", billingAddress.getTown());
-			//~ billingParameters.put("zip", billingAddress.getPostalCode());
-			//~ billingParameters.put("country_code", billingAddress.getCountry().getIsocode());
-			
-			//~ shippingParameters.put("street", addressData.getLine1() + " " + addressData.getLine2());
-			//~ shippingParameters.put("city", addressData.getTown());
-			//~ shippingParameters.put("zip", addressData.getPostalCode());
-			//~ shippingParameters.put("country_code", addressData.getCountry().getIsocode());
-			
-		
+            //~ shippingParameters.put("same_as_billing", 1);
+            
+        
+            
+            //~ AddressData billingAddress = getSessionService().getAttribute("novalnetAddressdata");
+            
+            //~ billingParameters.put("street", billingAddress.getLine1() + " " + billingAddress.getLine2());
+            //~ billingParameters.put("city", billingAddress.getTown());
+            //~ billingParameters.put("zip", billingAddress.getPostalCode());
+            //~ billingParameters.put("country_code", billingAddress.getCountry().getIsocode());
+            
+            //~ shippingParameters.put("street", addressData.getLine1() + " " + addressData.getLine2());
+            //~ shippingParameters.put("city", addressData.getTown());
+            //~ shippingParameters.put("zip", addressData.getPostalCode());
+            //~ shippingParameters.put("country_code", addressData.getCountry().getIsocode());
+            
+        
         
         //~ customerParameters.put("billing", billingParameters);
         //~ customerParameters.put("shipping", shippingParameters);
@@ -1014,6 +1024,8 @@ public class NovalnetOrderFacade {
             LOG.error("MalformedURLException ", ex);
         } catch (IOException ex) {
             LOG.error("IOException ", ex);
+        } catch (Exception ex) {
+            LOG.error("Exception ", ex);
         }
 
         LOG.info("response recieved from novalnet");
@@ -1059,43 +1071,42 @@ public class NovalnetOrderFacade {
         
         JSONObject responseJson                                            = new JSONObject(response);
         JSONObject paymentDataJson                                         = new JSONObject(paymentData);
-        JSONObject customerJson                                       	   = responseJson.getJSONObject("customer");
-        JSONObject billingJson                                       	   = customerJson.getJSONObject("billing");
+        JSONObject customerJson                                            = responseJson.getJSONObject("customer");
+        JSONObject billingJson                                             = customerJson.getJSONObject("billing");
         NovalnetPaymentInfoModel paymentInfoModel                          = new NovalnetPaymentInfoModel();
         
         final List<PaymentTransactionEntryModel> paymentTransactionEntries = new ArrayList<>();
         
         if (Boolean.TRUE.equals(getSessionService().getAttribute("isUseDeliveryAddress")))  {
-			addressData = getCheckoutFacade().getCheckoutCart().getDeliveryAddress();
-		} else {
-			addressData    = new AddressData();
-			billingAddress =  getModelService().create(AddressModel.class);
-			addressData.setFirstName(customerJson.get("first_name").toString());
+            addressData = getCheckoutFacade().getCheckoutCart().getDeliveryAddress();
+        } else {
+            addressData    = new AddressData();
+            billingAddress =  getModelService().create(AddressModel.class);
+            addressData.setFirstName(customerJson.get("first_name").toString());
             addressData.setLastName(customerJson.get("last_name").toString());
-            addressData.setLine1(billingJson.get("street").toString());
+            addressData.setLine1(billingJson.get("street").toString() + billingJson.get("house_no").toString());
             addressData.setTown(billingJson.get("city").toString());
             addressData.setPostalCode(billingJson.get("zip").toString());
             addressData.setCountry(getI18NFacade().getCountryForIsocode(billingJson.get("country_code").toString()));
-		}
-		
-		getSessionService().setAttribute("novalnetAddressData", addressData);
-		
-		final CartModel cartModel      = getCart();
+        }
+        
+        addressData.setBillingAddress(true);
+        
+        getSessionService().setAttribute("novalnetAddressData", addressData);
+        
+        final CartModel cartModel      = getCart();
         final UserModel currentUser    = getCurrentUserForCheckout();
         final BaseStoreModel baseStore = this.getBaseStoreModel();
         String guestEmail              = getGuestEmail();
         final String email             = (guestEmail != null) ? guestEmail : JaloSession.getCurrentSession().getUser().getLogin();
-		
-		billingAddress                 = addressReverseConverter.convert(addressData, billingAddress);
+        
+        billingAddress                 = addressReverseConverter.convert(addressData, billingAddress);
         billingAddress.setEmail(email);
-        billingAddress.setOwner(cartModel);
+        billingAddress.setOwner(currentUser);
         
         if (Boolean.FALSE.equals(getSessionService().getAttribute("isUseDeliveryAddress")))  {
-			System.out.println("---------inside save ======================");
-			getModelService().save(billingAddress);
-		}
-        
-        
+            getModelService().save(billingAddress);
+        }
         
         final Locale language     = JaloSession.getCurrentSession().getSessionContext().getLocale();
         final String languageCode = language.toString().toUpperCase();
@@ -1158,7 +1169,7 @@ public class NovalnetOrderFacade {
         getSessionService().setAttribute("novalnetOrderComments", orderComments);
         
         
-		
+        
         paymentInfoModel.setBillingAddress(billingAddress);
         paymentInfoModel.setPaymentEmailAddress(email);
         paymentInfoModel.setDuplicate(Boolean.FALSE);
@@ -1186,13 +1197,15 @@ public class NovalnetOrderFacade {
         
         cartModel.setPaymentTransactions(Arrays.asList(paymentTransactionModel));
         getModelService().save(cartModel);
-
+        
+        //~ getCheckoutFacade().beforePlaceOrder(cartModel);
         final OrderData orderData = getCheckoutFacade().placeOrder();
         
         String orderNumber = orderData.getCode();
         List<OrderModel> orderInfoModel = getOrderInfoModel(orderNumber);
         
         paymentInfoModel.setCode(orderNumber);
+        //~ getModelService().save(paymentInfoModel);
         getModelService().save(paymentInfoModel);
         
         
@@ -1253,6 +1266,72 @@ public class NovalnetOrderFacade {
         String jsonString = gson.toJson(dataParameters);
         String url = "https://payport.novalnet.de/v2/transaction/update";
         sendRequest(url, jsonString);
+    }
+    
+    
+    public String processPayment( Optional<HttpServletRequest> request, Model model) {
+		
+		OrderData orderData = new OrderData();
+        
+        try
+        {
+            final CartData cartData      = getCheckoutFacade().getCheckoutCart();
+            Integer orderAmountCent      = getOrderAmount(cartData);
+            final String currency        = cartData.getTotalPriceWithTax().getCurrencyIso();
+            final Locale language        = JaloSession.getCurrentSession().getSessionContext().getLocale();
+            final String languageCode    = language.toString().toUpperCase();
+            String guestEmail            = getGuestEmail();
+            final String emailAddress    = (guestEmail != null) ? guestEmail : JaloSession.getCurrentSession().getUser().getLogin();
+            getSessionService().setAttribute("email", emailAddress);
+            String paymentData           = getSessionService().getAttribute("novalnetPaymentResponse");
+            System.out.println(paymentData);
+            String requsetDeatils        = formPaymentRequest(cartData, emailAddress, orderAmountCent, currency, languageCode, paymentData, request);
+            String novalnetPaymentAction = getSessionService().getAttribute("novalnetPaymentAction");
+            String url                   = (!novalnetPaymentAction.equals("") && novalnetPaymentAction.equals("auth")) ? "https://payport.novalnet.de/v2/authorize" : "https://payport.novalnet.de/v2/payment";
+            StringBuilder response       = sendRequest( url, requsetDeatils.toString());
+            JSONObject responseJson      = new JSONObject(response.toString());
+            
+            if(responseJson.has("result") && responseJson.has("transaction")) {
+                
+                JSONObject resultJson        = responseJson.getJSONObject("result");
+                JSONObject transactionJson   = responseJson.getJSONObject("transaction");
+                String[] successStatus = {"CONFIRMED", "ON_HOLD", "PENDING"};
+                
+                if (resultJson.get("status").equals("SUCCESS")) {
+					
+					if (getSessionService().getAttribute("novalnetProcessMode").equals("redirect") && resultJson.has("redirect_url")) {
+						String redirectURL = resultJson.get("redirect_url").toString();
+						//~ setupPageModel(model);
+						//~ model.addAttribute("paygateUrl", redirectURL);
+						getSessionService().setAttribute("txn_secret", transactionJson.get("txn_secret").toString());
+						//~ getSessionService().setAttribute("txn_check", baseStore.getNovalnetPaymentAccessKey().trim());
+						return "redirect:" + redirectURL;
+					}
+					
+                    orderData            = placeOrder(response.toString());
+                } else {
+                    return "payment_error";
+                }
+            } else {
+				LOG.error("Failed to place Order missing novalnet response");
+				//~ GlobalMessages.addErrorMessage(model, "checkout.placeOrder.failed");
+				return "order_error";
+			}
+            
+        } catch (final Exception e) {
+            LOG.error("Failed to place Order", e);
+            //~ GlobalMessages.addErrorMessage(model, "checkout.placeOrder.failed");
+            return "order_error";
+        }
+        
+        return redirectToOrderConfirmationPage(orderData);
+	}
+	
+	protected String redirectToOrderConfirmationPage(final OrderData orderData) {
+		String REDIRECT_URL_ORDER_CONFIRMATION = getSessionService().getAttribute("REDIRECT_PREFIX") + "/checkout/multi/novalnet/order/confirmation/";
+		
+        return REDIRECT_URL_ORDER_CONFIRMATION
+                + (getCheckoutCustomerStrategy().isAnonymousCheckout() ? orderData.getGuid() : orderData.getCode());
     }
 
 }

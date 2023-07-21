@@ -211,67 +211,22 @@ public class NovalnetSummaryCheckoutStepController extends AbstractCheckoutStepC
             // Invalid cart. Bounce back to the cart page.
             return REDIRECT_PREFIX + "/cart";
         }
+        Optional<HttpServletRequest> optionalRequest = Optional.ofNullable(request);
+        String result =  novalnetOrderFacade.processPayment(optionalRequest, model);
+        JSONObject tomJsonObject = new JSONObject(result.toString());
+        JSONObject resultJson = tomJsonObject.getJSONObject("result");
         
-        OrderData orderData = new OrderData();
-        
-        try
-        {
-            final CartData cartData      = getCheckoutFacade().getCheckoutCart();
-            Integer orderAmountCent      = novalnetOrderFacade.getOrderAmount(cartData);
-            final String currency        = cartData.getTotalPriceWithTax().getCurrencyIso();
-            final Locale language        = JaloSession.getCurrentSession().getSessionContext().getLocale();
-            final String languageCode    = language.toString().toUpperCase();
-            String guestEmail            = novalnetOrderFacade.getGuestEmail();
-            final String emailAddress    = (guestEmail != null) ? guestEmail : JaloSession.getCurrentSession().getUser().getLogin();
-            getSessionService().setAttribute("email", emailAddress);
-            String paymentData           = getSessionService().getAttribute("novalnetPaymentResponse");
-            System.out.println("1111111111111111111");
-            System.out.println("1111111111111111111");
-            System.out.println(paymentData);
-            Optional<HttpServletRequest> optionalRequest = Optional.ofNullable(request);
-            String requsetDeatils        = novalnetOrderFacade.formPaymentRequest(cartData, emailAddress, orderAmountCent, currency, languageCode, paymentData, optionalRequest);
-            String novalnetPaymentAction = getSessionService().getAttribute("novalnetPaymentAction");
-            String url                   = (!novalnetPaymentAction.equals("") && novalnetPaymentAction.equals("auth")) ? "https://payport.novalnet.de/v2/authorize" : "https://payport.novalnet.de/v2/payment";
-            StringBuilder response       = novalnetOrderFacade.sendRequest( url, requsetDeatils.toString());
-            JSONObject responseJson      = new JSONObject(response.toString());
-            
-            if(responseJson.has("result") && responseJson.has("transaction")) {
-                
-                JSONObject resultJson      = responseJson.getJSONObject("result");
-                JSONObject transactionJson   = responseJson.getJSONObject("transaction");
-                String[] successStatus = {"CONFIRMED", "ON_HOLD", "PENDING"};
-                
-                if (resultJson.get("status").equals("SUCCESS")) {
-					
-					if (getSessionService().getAttribute("novalnetProcessMode").equals("redirect") && resultJson.has("redirect_url")) {
-						String redirectURL = resultJson.get("redirect_url").toString();
-						//~ setupPageModel(model);
-						//~ model.addAttribute("paygateUrl", redirectURL);
-						getSessionService().setAttribute("txn_secret", transactionJson.get("txn_secret").toString());
-						//~ getSessionService().setAttribute("txn_check", baseStore.getNovalnetPaymentAccessKey().trim());
-						return "redirect:" + redirectURL;
-					}
-					
-					
-                    orderData            = novalnetOrderFacade.placeOrder(response.toString());
-                } else {
-                    final String statusMessage = resultJson.get("status_text").toString() != null ? resultJson.get("status_text").toString() : resultJson.get("status_desc").toString();
-                    getSessionService().setAttribute("novalnetCheckoutError", statusMessage);
-                    return getCheckoutStep().previousStep();
-                }
-            } else {
-				LOGGER.error("Failed to place Order missing novalnet response");
-				GlobalMessages.addErrorMessage(model, "checkout.placeOrder.failed");
-				return enterStep(model, redirectModel);
-			}
-            
-        } catch (final Exception e) {
-            LOGGER.error("Failed to place Order", e);
-            GlobalMessages.addErrorMessage(model, "checkout.placeOrder.failed");
-            return enterStep(model, redirectModel);
-        }
-        
-        return redirectToOrderConfirmationPage(orderData);
+        if(result.equals("payment_error")) {
+			final String statusMessage = resultJson.get("status_text").toString() != null ? resultJson.get("status_text").toString() : resultJson.get("status_desc").toString();
+            getSessionService().setAttribute("novalnetCheckoutError", statusMessage);
+			return getCheckoutStep().previousStep();
+		} else if (result.equals("order_error")) {
+			GlobalMessages.addErrorMessage(model, "checkout.placeOrder.failed");
+			return enterStep(model, redirectModel);
+			
+		} else {
+			return result;
+		}
     }
     
     /**
@@ -336,10 +291,7 @@ public class NovalnetSummaryCheckoutStepController extends AbstractCheckoutStepC
         return invalid;
     }
     
-    protected String redirectToOrderConfirmationPage(final OrderData orderData) {
-        return REDIRECT_URL_ORDER_CONFIRMATION
-                + (getCheckoutCustomerStrategy().isAnonymousCheckout() ? orderData.getGuid() : orderData.getCode());
-    }
+    
 
     @RequestMapping(value = "/back", method = RequestMethod.GET)
     @RequireHardLogIn

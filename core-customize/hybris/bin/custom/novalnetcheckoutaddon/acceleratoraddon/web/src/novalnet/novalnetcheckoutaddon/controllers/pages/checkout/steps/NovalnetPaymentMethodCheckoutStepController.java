@@ -152,6 +152,8 @@ public class NovalnetPaymentMethodCheckoutStepController extends AbstractCheckou
         AddressData addressData;
         AddressData deliveryAddressData;
         
+        Integer skipSummaryPage = 0;
+        
         final Map<String, Object> customerParameters = new HashMap<String, Object>();
         final Map<String, String> billingParameters  = new HashMap<String, String>();
         final Map<String, String> shippingParameters = new HashMap<String, String>();
@@ -174,6 +176,10 @@ public class NovalnetPaymentMethodCheckoutStepController extends AbstractCheckou
 				if(bookingDetails.has("birth_date")) {
 					customerParameters.put("birth_date", bookingDetails.get("birth_date").toString());
 				}
+				
+				if(bookingDetails.has("wallet_token")) {
+					skipSummaryPage = 1;
+				}
 			}
 		
 		} catch(Exception e) {
@@ -195,7 +201,6 @@ public class NovalnetPaymentMethodCheckoutStepController extends AbstractCheckou
 						"checkout.multi.paymentMethod.createSubscription.billingAddress.noneSelectedMsg");
 				return addPaymentProcess(model);
 			}
-			addressData.setBillingAddress(true);
 			
 			shippingParameters.put("same_as_billing", "1");
 			
@@ -247,6 +252,19 @@ public class NovalnetPaymentMethodCheckoutStepController extends AbstractCheckou
 		getSessionService().setAttribute("isUseDeliveryAddress", paymentDetailsForm.isUseDeliveryAddress());
 		getSessionService().setAttribute("novalnetPaymentResponse", paymentDetails);
 		getSessionService().setAttribute("novalnetAddressData", customerParameters);
+		
+		getSessionService().setAttribute("REDIRECT_PREFIX", REDIRECT_PREFIX);
+		
+		if(skipSummaryPage == 1) {			
+			String result =  novalnetOrderFacade.processPayment(Optional.empty(), model);
+			
+			if(result.equals("payment_error") || result.equals("order_error")) {
+				GlobalMessages.addErrorMessage(model, "checkout.placeOrder.failed");
+				return getCheckoutStep().currentStep();
+			} else {
+				return result;
+			}
+		}
 		
         return getCheckoutStep().nextStep();
     }
