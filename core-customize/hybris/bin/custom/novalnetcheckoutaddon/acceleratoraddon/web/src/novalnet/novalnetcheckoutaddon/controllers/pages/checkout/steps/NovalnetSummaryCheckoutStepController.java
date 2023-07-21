@@ -213,11 +213,12 @@ public class NovalnetSummaryCheckoutStepController extends AbstractCheckoutStepC
         }
         Optional<HttpServletRequest> optionalRequest = Optional.ofNullable(request);
         String result =  novalnetOrderFacade.processPayment(optionalRequest, model);
-        JSONObject tomJsonObject = new JSONObject(result.toString());
-        JSONObject resultJson = tomJsonObject.getJSONObject("result");
+        //~ JSONObject tomJsonObject = new JSONObject(result.toString());
+        //~ JSONObject resultJson = tomJsonObject.getJSONObject("result");
         
         if(result.equals("payment_error")) {
-			final String statusMessage = resultJson.get("status_text").toString() != null ? resultJson.get("status_text").toString() : resultJson.get("status_desc").toString();
+			//~ final String statusMessage = resultJson.get("status_text").toString() != null ? resultJson.get("status_text").toString() : resultJson.get("status_desc").toString();
+            final String statusMessage =  "Payment transaction error. Order place failed";
             getSessionService().setAttribute("novalnetCheckoutError", statusMessage);
 			return getCheckoutStep().previousStep();
 		} else if (result.equals("order_error")) {
