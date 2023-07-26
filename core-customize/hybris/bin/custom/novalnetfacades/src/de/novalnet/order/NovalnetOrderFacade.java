@@ -770,7 +770,7 @@ public class NovalnetOrderFacade {
         dataParameters.put("merchant",    buildMerchanData(addressData));
         dataParameters.put("transaction", buildTransactionData(orderAmountCent, currency, paymentData, request));
         
-        dataParameters.put("custom",      buildCustomData(languageCode));
+        dataParameters.put("custom",      buildCustomData(languageCode, cartData));
         
         if ("paymentForm".equals(paymentData)) {
             dataParameters.put("hosted_page", buildHostedPageData());
@@ -782,11 +782,13 @@ public class NovalnetOrderFacade {
         return jsonString;
     }
     
-    public Map<String, Object> buildCustomData(String languageCode) {
+    public Map<String, Object> buildCustomData(String languageCode, CartData cartData) {
         
         final Map<String, Object> customParameters = new HashMap<String, Object>();
         
         customParameters.put("lang", languageCode);
+        customParameters.put("input1", "cartId");
+        customParameters.put("inputval1", cartData.getCode());
         
         return customParameters;
     }
