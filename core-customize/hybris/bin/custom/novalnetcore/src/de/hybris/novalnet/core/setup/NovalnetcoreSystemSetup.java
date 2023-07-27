@@ -14,6 +14,10 @@ import java.util.List;
 public class NovalnetcoreSystemSetup extends AbstractSystemSetup {
 
     private static final String IMPORT_CORE_DATA = "importCoreData";
+    private static final String IMPORT_SAMPLE_DATA_ELECTRONICS = "importSampleDataElectronics";
+    private static final String IMPORT_SAMPLE_DATA_APPAREL = "importSampleDataApparel";
+    private static final String ACTIVATE_PAYMENT_METHOD = "activatePaymentMethod";
+
 
     @Override
     @SystemSetupParameterMethod
@@ -24,6 +28,7 @@ public class NovalnetcoreSystemSetup extends AbstractSystemSetup {
         
         return params;
     }
+
 
     @SystemSetup(type = SystemSetup.Type.PROJECT, process = SystemSetup.Process.ALL)
     public void createProjectData(final SystemSetupContext context) {

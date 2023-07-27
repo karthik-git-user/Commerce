@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
+<!--
+ Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+-->
 <project name="novalnetbackoffice_buildcallbacks">
 
     <property name="novalnetbackofficeWebFragmentSrc"
@@ -121,5 +123,19 @@
         <include name="resources/**/ValidationMessages.properties"/>
 
     </patternset>
+
+    <!--
+        <macrodef name="novalnetbackoffice_before_build">
+
+            <sequential>
+
+                <register_sass_extension extensionname="novalnetbackoffice"/>
+
+                <register_sass_extension destination="" extensionname="novalnetbackoffice" resources="resources"/>
+
+            </sequential>
+
+        </macrodef>
+    -->
 
 </project>

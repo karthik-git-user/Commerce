@@ -34,7 +34,6 @@
             <ref bean="defaultNovalnetcheckoutaddonBeforeViewJsPropsHandlerAdaptee"/>
         </property>
     </bean>
-
     <bean id="NovalnetcheckoutaddonBeforeViewHandlerListMergeDirective" depends-on="beforeViewHandlersList"
           parent="listMergeDirective">
         <property name="add" ref="getNovalnetcheckoutaddonBeforeViewHandler"/>
@@ -47,16 +46,21 @@
         <constructor-arg value="redirect:/checkout/multi/novalnet/summary/enter"/>
     </bean>
 
+    <!-- Customize the redirect URL for checkout Confirmation page -->
+    <bean id="NOVALNET_REDIRECT_TO_CONFIRMATION" class="java.lang.String">
+        <constructor-arg value="redirect:/checkout/multi/novalnet/orderConfirmation/%s"/>
+    </bean>
+
     <bean id="REDIRECT_TO_PLACEORDER" class="java.lang.String">
         <constructor-arg value="redirect:/checkout/multi/novalnet/summary/placeOrder"/>
     </bean>
 
+
+    <bean id="REDIRECT_TO_PAYMENT_METHOD_NOVALNET" class="java.lang.String">
+        <constructor-arg value="redirect:/checkout/multi/novalnet/select-payment-method"/>
+    </bean>
     <bean id="REDIRECT_TO_PAYMENT_METHOD" class="java.lang.String">
         <constructor-arg value="redirect:/checkout/multi/novalnet/select-payment-method/add"/>
-    </bean>
-    
-    <bean id="NOVALNET_REDIRECT_TO_CONFIRMATION" class="java.lang.String">
-        <constructor-arg value="redirect:/checkout/multi/novalnet/orderConfirmation/%s"/>
     </bean>
 
     <bean name="novalnetPaymentMethodCheckoutStepController"
@@ -64,7 +68,6 @@
 
     <bean id="novalnetSummaryCheckoutStepController"
           class="novalnet.novalnetcheckoutaddon.controllers.pages.checkout.steps.NovalnetSummaryCheckoutStepController"/>
-
 
     <bean id="novalnetCheckoutController"
           class="novalnet.novalnetcheckoutaddon.controllers.pages.checkout.steps.NovalnetCheckoutController"/>
@@ -85,21 +88,18 @@
             <map merge="true">
                 <entry key="previous" value-ref="REDIRECT_TO_PAYMENT_METHOD"/>
                 <entry key="current" value-ref="REDIRECT_TO_SUMMARY"/>
-                <entry key="next" value="redirect:/checkout/multi/novalnet/order/confirmation/%s"/>
+                <entry key="next" value="redirect:/checkout/multi/novalnet/orderConfirmation/%s"/>
             </map>
         </property>
         <property name="progressBarId" value="confirmOrder"/>
     </bean>
 
 
-<!--
     <alias alias="accountPageController" name="novalnetAccountPageController"/>
     <bean id="novalnetAccountPageController"
           class="novalnet.novalnetcheckoutaddon.controllers.pages.account.NovalnetAccountPageController"/>
--->
           
-<!--
-    <bean id="novalnetCallbackHandler" class="novalnet.novalnetcheckoutaddon.controllers.integration.NovalnetCallbackHandler"/>
+	<bean id="novalnetCallbackHandler" class="novalnet.novalnetcheckoutaddon.controllers.integration.NovalnetCallbackHandler"/>
     <bean depends-on="beforeControllerHandlersList" parent="listMergeDirective">
         <property name="add">
             <bean parent="beforeControllerHandlerAdapter">
@@ -107,7 +107,6 @@
             </bean>
         </property>
     </bean>
--->
     
 </beans>
 

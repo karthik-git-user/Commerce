@@ -22,15 +22,39 @@ import java.util.Map;
  * NovalnetPaymentDetailsForm
  */
 public class NovalnetPaymentDetailsForm {
-    
-    private String nnPaymentResponse;
-
-    private boolean newBillingAddress;
-
     private String paymentId;
 
+    private String amount;
     private String billToCountry;
+    private String comments;
+    private String currency;
     private Map<String, String> parameters;
+
+    private boolean saveInAccount;
+
+
+    private String selectedPaymentMethodId;
+    private String creditCardOneClickData1;
+    private boolean creditcardSaveData;
+    private boolean paypalSaveData;
+    private boolean directDebitSepaSaveData;
+    private boolean guaranteedDirectDebitSepaSaveData;
+    private String creditCardOneClickData2;
+    private String directDebitSepaOneClickData1;
+    private String guaranteedDirectDebitSepaOneClickData1;
+    private String directDebitSepaOneClickData2;
+    private String payPalOneClickData1;
+    private String paypalOneClickData2;
+
+    private String accountIban;
+    private String guaranteeAccountIban;
+    private String novalnetCreditCardPanHash;
+    private String novalnetCreditCardUniqueId;
+    private String do_redirect;
+    private String previousSelectedPayment;
+    private boolean novalnetCreditCardOneClickProcess;
+    private boolean novalnetDirectDebitSepaOneClickProcess;
+    private boolean novalnetPayPalOneClickProcess;
 
     private String billTo_city; // NOSONAR
     private String billTo_country; // NOSONAR
@@ -45,8 +69,105 @@ public class NovalnetPaymentDetailsForm {
     private String billTo_street1; // NOSONAR
     private String billTo_street2; // NOSONAR
 
+    private String novalnetCreditCardOneClickCardType;
+    private String novalnetCreditCardOneClickCardHolder;
+    private String novalnetCreditCardOneClickMaskedCardNumber;
+    private String novalnetCreditCardOneClickToken1;
+    private String novalnetCreditCardOneClickCardExpiry;
+    private String creditCardOneClickNewDeatails;
+
+    private String novalnetDirectDebitSepaOneClickAccountHolder;
+    private String novalnetDirectDebitSepaOneClickMaskedAccountIban;
+
+    private String novalnetGuaranteedDirectDebitSepaDateOfBirth;
+    private boolean novalnetDirectDebitSepaGuaranteeProcess;
+    private String novalnetGuaranteedInvoiceDateOfBirth;
+    private boolean novalnetInvoiceGuaranteeProcess;
+
+    private String novalnetPaypalOneClickPpTransactionId;
+    private String novalnetPaypalOneClickRefTransactionId;
+
     private AddressForm billingAddress;
+    private boolean newBillingAddress;
     private boolean useDeliveryAddress;
+    private boolean savePaymentInfo;
+
+
+    public String getPaymentId() {
+        return this.paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public boolean isNewBillingAddress() {
+        return this.newBillingAddress;
+    }
+
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(final String amount) {
+        this.amount = amount;
+    }
+
+    public String getBillToCountry() {
+        return billToCountry;
+    }
+
+    public void setBillToCountry(String billToCountry) {
+        this.billToCountry = billToCountry;
+    }
+
+    public String getComments() {
+        return this.comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getCurrency() {
+        return this.currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+
+    public Map<String, String> getParameters() {
+        return this.parameters;
+    }
+
+    public void setParameters(Map<String, String> parameters) {
+        this.parameters = parameters;
+    }
+
+    public boolean isSaveInAccount() {
+        return saveInAccount;
+    }
+
+    public void setSaveInAccount(final boolean saveInAccount) {
+        this.saveInAccount = saveInAccount;
+    }
+
+    /**
+     * @return billingAddress
+     */
+    public AddressForm getBillingAddress() {
+        return billingAddress;
+    }
+
+    /**
+     * @param billingAddress the billingAddress to set
+     */
+    public void setBillingAddress(final AddressForm billingAddress) {
+        this.billingAddress = billingAddress;
+    }
 
     /**
      * @return the newBillingAddress
@@ -62,35 +183,337 @@ public class NovalnetPaymentDetailsForm {
         this.newBillingAddress = newBillingAddress;
     }
 
-
-    public String getNnPaymentResponse() {
-        return this.nnPaymentResponse;
-    }
-
-    public void setNnPaymentResponse(String nnPaymentResponse) {
-        this.nnPaymentResponse = nnPaymentResponse;
-    }
-
-    public String getBillToCountry() {
-        return billToCountry;
-    }
-
-    public void setBillToCountry(String billToCountry) {
-        this.billToCountry = billToCountry;
-    }
-   
     /**
-     * @return billingAddress
+     * @return the saveInAccount
      */
-    public AddressForm getBillingAddress() {
-        return billingAddress;
+    public Boolean getSaveInAccount() {
+        return saveInAccount;
     }
 
     /**
-     * @param billingAddress the billingAddress to set
+     * @param saveInAccount the saveInAccount to set
      */
-    public void setBillingAddress(final AddressForm billingAddress) {
-        this.billingAddress = billingAddress;
+    public void setSaveInAccount(final Boolean saveInAccount) {
+        this.saveInAccount = saveInAccount;
+    }
+
+    /**
+     * @return the selectedPaymentMethodId
+     */
+    public String getSelectedPaymentMethodId() {
+        return selectedPaymentMethodId;
+    }
+
+    /**
+     * @return the selectedPaymentMethodId
+     */
+    public String getCreditCardOneClickData1() {
+        return creditCardOneClickData1;
+    }
+    
+    public String getDirectDebitSepaOneClickData1() {
+        return directDebitSepaOneClickData1;
+    }
+
+    public String getGuaranteedDirectDebitSepaOneClickData1() {
+        return guaranteedDirectDebitSepaOneClickData1;
+    }
+    
+    public String getPayPalOneClickData1() {
+        return payPalOneClickData1;
+    }
+    
+    public void setPayPalOneClickData1(final String payPalOneClickData1) {
+        this.payPalOneClickData1 = payPalOneClickData1;
+    }
+
+
+    /**
+     * @return the selectedPaymentMethodId
+     */
+    public String getDirectDebitSepaOneClickData2() {
+        return directDebitSepaOneClickData2;
+    }
+    
+    public String getPayPalOneClickData2() {
+        return paypalOneClickData2;
+    }
+    
+    public String getCreditCardOneClickData2() {
+        return creditCardOneClickData2;
+    }
+    
+    public boolean isCreditcardSaveData() {
+        return creditcardSaveData;
+    }
+    
+    public boolean isPaypalSaveData() {
+        return paypalSaveData;
+    }
+    
+    public boolean isDirectDebitSepaSaveData() {
+        return directDebitSepaSaveData;
+    }
+    
+    public boolean isGuaranteedDirectDebitSepaSaveData() {
+        return guaranteedDirectDebitSepaSaveData;
+    }
+
+    /**
+     * @param selectedPaymentMethodId the selectedPaymentMethodId to set
+     */
+    public void setCreditCardOneClickData2(final String creditCardOneClickData2) {
+        this.creditCardOneClickData2 = creditCardOneClickData2;
+    }
+    
+    public void setDirectDebitSepaOneClickData2(final String directDebitSepaOneClickData2) {
+        this.directDebitSepaOneClickData2 = directDebitSepaOneClickData2;
+    }
+    
+    public void setPayPalOneClickData2(final String paypalOneClickData2) {
+        this.paypalOneClickData2 = paypalOneClickData2;
+    }
+    
+    public void setCreditcardSaveData(final boolean creditcardSaveData) {
+        this.creditcardSaveData = creditcardSaveData;
+    }
+    
+    public void setPaypalSaveData(final boolean paypalSaveData) {
+        this.paypalSaveData = paypalSaveData;
+    }
+    
+    public void setDirectDebitSepaSaveData(final boolean directDebitSepaSaveData) {
+        this.directDebitSepaSaveData = directDebitSepaSaveData;
+    }
+    
+    public void setGuaranteedDirectDebitSepaSaveData(final boolean guaranteedDirectDebitSepaSaveData) {
+        this.guaranteedDirectDebitSepaSaveData = guaranteedDirectDebitSepaSaveData;
+    }
+
+    /**
+     * @param selectedPaymentMethodId the selectedPaymentMethodId to set
+     */
+    public void setCreditCardOneClickData1(final String creditCardOneClickData1) {
+        this.creditCardOneClickData1 = creditCardOneClickData1;
+    }
+    
+    public void setDirectDebitSepaOneClickData1(final String directDebitSepaOneClickData1) {
+        this.directDebitSepaOneClickData1 = directDebitSepaOneClickData1;
+    }
+    
+    public void setGuaranteedDirectDebitSepaOneClickData1(final String guaranteedDirectDebitSepaOneClickData1) {
+        this.guaranteedDirectDebitSepaOneClickData1 = guaranteedDirectDebitSepaOneClickData1;
+    }
+    
+    
+    /**
+     * @param selectedPaymentMethodId the selectedPaymentMethodId to set
+     */
+    public void setSelectedPaymentMethodId(final String selectedPaymentMethodId) {
+        this.selectedPaymentMethodId = selectedPaymentMethodId;
+    }
+
+
+    /**
+     * @return the accountIban
+     */
+    public String getAccountIban() {
+        return accountIban;
+    }
+
+    /**
+     * @param accountIban the accountIban to set
+     */
+    public void setAccountIban(final String accountIban) {
+        this.accountIban = accountIban;
+    }
+    
+    /**
+     * @return the guaranteeAccountIban
+     */
+    public String getGuaranteeAccountIban() {
+        return guaranteeAccountIban;
+    }
+
+    /**
+     * @param accountIban the accountIban to set
+     */
+    public void setGuaranteeAccountIban(final String guaranteeAccountIban) {
+        this.guaranteeAccountIban = guaranteeAccountIban;
+    }
+
+    /**
+     * @return the novalnetCreditCardPanHash
+     */
+    public String getNovalnetCreditCardPanHash() {
+        return novalnetCreditCardPanHash;
+    }
+
+    /**
+     * @param novalnetCreditCardPanHash the novalnetCreditCardPanHash to set
+     */
+    public void setNovalnetCreditCardPanHash(final String novalnetCreditCardPanHash) {
+        this.novalnetCreditCardPanHash = novalnetCreditCardPanHash;
+    }
+
+    /**
+     * @return the novalnetCreditCardUniqueId
+     */
+    public String getNovalnetCreditCardUniqueId() {
+        return novalnetCreditCardUniqueId;
+    }
+    
+    public String getdo_redirect() {
+        return do_redirect;
+    }
+
+    /**
+     * @param novalnetCreditCardUniqueId the novalnetCreditCardUniqueId to set
+     */
+    public void setNovalnetCreditCardUniqueId(final String novalnetCreditCardUniqueId) {
+        this.novalnetCreditCardUniqueId = novalnetCreditCardUniqueId;
+    }
+    
+    public void setdo_redirect(final String do_redirect) {
+        this.do_redirect = do_redirect;
+    }
+
+    /**
+     * @return the previousSelectedPayment
+     */
+    public String getPreviousSelectedPayment() {
+        return previousSelectedPayment;
+    }
+
+    /**
+     * @param previousSelectedPayment the previousSelectedPayment to set
+     */
+    public void setPreviousSelectedPayment(final String previousSelectedPayment) {
+        this.previousSelectedPayment = previousSelectedPayment;
+    }
+
+    /**
+     * @return the novalnetCreditCardOneClickProcess
+     */
+    public boolean isNovalnetCreditCardOneClickProcess() {
+        return novalnetCreditCardOneClickProcess;
+    }
+
+    /**
+     * @param novalnetCreditCardOneClickProcess the novalnetCreditCardOneClickProcess to set
+     */
+    public void setNovalnetCreditCardOneClickProcess(final boolean novalnetCreditCardOneClickProcess) {
+        this.novalnetCreditCardOneClickProcess = novalnetCreditCardOneClickProcess;
+    }
+
+    /**
+     * @return the novalnetDirectDebitSepaOneClickProcess
+     */
+    public boolean isNovalnetDirectDebitSepaOneClickProcess() {
+        return novalnetDirectDebitSepaOneClickProcess;
+    }
+
+    /**
+     * @param novalnetDirectDebitSepaOneClickProcess the novalnetDirectDebitSepaOneClickProcess to set
+     */
+    public void setNovalnetDirectDebitSepaOneClickProcess(final boolean novalnetDirectDebitSepaOneClickProcess) {
+        this.novalnetDirectDebitSepaOneClickProcess = novalnetDirectDebitSepaOneClickProcess;
+    }
+
+    /**
+     * @return the novalnetPaypalOneClickProcess
+     */
+    public boolean isNovalnetPayPalOneClickProcess() {
+        return novalnetPayPalOneClickProcess;
+    }
+
+    /**
+     * @param novalnetPaypalOneClickProcess the novalnetPaypalOneClickProcess to set
+     */
+    public void setNovalnetPayPalOneClickProcess(final boolean novalnetPayPalOneClickProcess) {
+        this.novalnetPayPalOneClickProcess = novalnetPayPalOneClickProcess;
+    }
+
+    /**
+     * @return the novalnetCreditCardOneClickCardType
+     */
+    public String getNovalnetCreditCardOneClickCardType() {
+        return novalnetCreditCardOneClickCardType;
+    }
+
+    public String getCreditCardOneClickNewDeatails() {
+        return creditCardOneClickNewDeatails;
+    }
+
+    /**
+     * @param novalnetCreditCardOneClickCardType the novalnetCreditCardOneClickCardType to set
+     */
+    public void setNovalnetCreditCardOneClickCardType(final String novalnetCreditCardOneClickCardType) {
+        this.novalnetCreditCardOneClickCardType = novalnetCreditCardOneClickCardType;
+    }
+
+    /**
+     * @param novalnetCreditCardOneClickCardType the novalnetCreditCardOneClickCardType to set
+     */
+    public void setCreditCardOneClickNewDeatails(final String creditCardOneClickNewDeatails) {
+        this.creditCardOneClickNewDeatails = creditCardOneClickNewDeatails;
+    }
+
+
+    /**
+     * @return the novalnetCreditCardOneClickCardHolder
+     */
+    public String getNovalnetCreditCardOneClickCardHolder() {
+        return novalnetCreditCardOneClickCardHolder;
+    }
+
+    /**
+     * @param novalnetCreditCardOneClickCardHolder the novalnetCreditCardOneClickCardHolder to set
+     */
+    public void setNovalnetCreditCardOneClickCardHolder(final String novalnetCreditCardOneClickCardHolder) {
+        this.novalnetCreditCardOneClickCardHolder = novalnetCreditCardOneClickCardHolder;
+    }
+
+    /**
+     * @return the novalnetCreditCardOneClickMaskedCardNumber
+     */
+    public String getNovalnetCreditCardOneClickMaskedCardNumber() {
+        return novalnetCreditCardOneClickMaskedCardNumber;
+    }
+
+    /**
+     * @return the novalnetCreditCardOneClickMaskedCardNumber
+     */
+    public String getNovalnetCreditCardOneClickToken1() {
+        return novalnetCreditCardOneClickToken1;
+    }
+
+    /**
+     * @param novalnetCreditCardOneClickMaskedCardNumber the novalnetCreditCardOneClickMaskedCardNumber to set
+     */
+    public void setNovalnetCreditCardOneClickMaskedCardNumber(final String novalnetCreditCardOneClickMaskedCardNumber) {
+        this.novalnetCreditCardOneClickMaskedCardNumber = novalnetCreditCardOneClickMaskedCardNumber;
+    }
+
+    /**
+     * @param novalnetCreditCardOneClickMaskedCardNumber the novalnetCreditCardOneClickMaskedCardNumber to set
+     */
+    public void setNovalnetCreditCardOneClickToken1(final String novalnetCreditCardOneClickToken1) {
+        this.novalnetCreditCardOneClickToken1 = novalnetCreditCardOneClickToken1;
+    }
+
+    /**
+     * @return the novalnetCreditCardOneClickCardExpiry
+     */
+    public String getNovalnetCreditCardOneClickCardExpiry() {
+        return novalnetCreditCardOneClickCardExpiry;
+    }
+
+    /**
+     * @param novalnetCreditCardOneClickCardExpiry the novalnetCreditCardOneClickCardExpiry to set
+     */
+    public void setNovalnetCreditCardOneClickCardExpiry(final String novalnetCreditCardOneClickCardExpiry) {
+        this.novalnetCreditCardOneClickCardExpiry = novalnetCreditCardOneClickCardExpiry;
     }
 
     /**
@@ -300,6 +723,151 @@ public class NovalnetPaymentDetailsForm {
     public void setBillTo_street2(final String billTo_street2) // NOSONAR
     {
         this.billTo_street2 = billTo_street2;
+    }
+
+    /**
+     * @return savePaymentInfo
+     */
+    public boolean isSavePaymentInfo() // NOSONAR
+    {
+        return savePaymentInfo;
+    }
+
+    /**
+     * @param savePaymentInfo the savePaymentInfo to set
+     */
+    public void setSavePaymentInfo(final boolean savePaymentInfo) // NOSONAR
+    {
+        this.savePaymentInfo = savePaymentInfo;
+    }
+
+    /**
+     * @return novalnetDirectDebitSepaOneClickAccountHolder
+     */
+    public String getNovalnetDirectDebitSepaOneClickAccountHolder() // NOSONAR
+    {
+        return novalnetDirectDebitSepaOneClickAccountHolder;
+    }
+
+    /**
+     * @param novalnetDirectDebitSepaOneClickAccountHolder the novalnetDirectDebitSepaOneClickAccountHolder to set
+     */
+    public void setNovalnetDirectDebitSepaOneClickAccountHolder(final String novalnetDirectDebitSepaOneClickAccountHolder) // NOSONAR
+    {
+        this.novalnetDirectDebitSepaOneClickAccountHolder = novalnetDirectDebitSepaOneClickAccountHolder;
+    }
+
+    /**
+     * @return novalnetDirectDebitSepaOneClickMaskedAccountIban
+     */
+    public String getNovalnetDirectDebitSepaOneClickMaskedAccountIban() // NOSONAR
+    {
+        return novalnetDirectDebitSepaOneClickMaskedAccountIban;
+    }
+
+    /**
+     * @param novalnetDirectDebitSepaOneClickMaskedAccountIban the novalnetDirectDebitSepaOneClickMaskedAccountIban to set
+     */
+    public void setNovalnetDirectDebitSepaOneClickAccountIban(final String novalnetDirectDebitSepaOneClickMaskedAccountIban) // NOSONAR
+    {
+        this.novalnetDirectDebitSepaOneClickMaskedAccountIban = novalnetDirectDebitSepaOneClickMaskedAccountIban;
+    }
+
+    /**
+     * @return novalnetPaypalOneClickPpTransactionId
+     */
+    public String getNovalnetPaypalOneClickPpTransactionId() // NOSONAR
+    {
+        return novalnetPaypalOneClickPpTransactionId;
+    }
+
+    /**
+     * @return novalnetPaypalOneClickRefTransactionId
+     */
+    public String getNovalnetPaypalOneClickRefTransactionId() // NOSONAR
+    {
+        return novalnetPaypalOneClickRefTransactionId;
+    }
+
+    /**
+     * @param novalnetPaypalOneClickPpTransactionId the novalnetPaypalOneClickPpTransactionId to set
+     */
+    public void setNovalnetPaypalOneClickPpTransactionId(final String novalnetPaypalOneClickPpTransactionId) // NOSONAR
+    {
+        this.novalnetPaypalOneClickPpTransactionId = novalnetPaypalOneClickPpTransactionId;
+    }
+
+    /**
+     * @param NovalnetPaypalOneClickRefTransactionId the NovalnetPaypalOneClickRefTransactionId to set
+     */
+    public void setNovalnetPaypalOneClickRefTransactionId(final String novalnetPaypalOneClickRefTransactionId) // NOSONAR
+    {
+        this.novalnetPaypalOneClickRefTransactionId = novalnetPaypalOneClickRefTransactionId;
+    }
+
+
+    /**
+     * @return novalnetDirectDebitSepaGuaranteeProcess
+     */
+    public boolean isNovalnetDirectDebitSepaGuaranteeProcess() // NOSONAR
+    {
+        return novalnetDirectDebitSepaGuaranteeProcess;
+    }
+
+    /**
+     * @param novalnetDirectDebitSepaGuaranteeProcess the novalnetDirectDebitSepaGuaranteeProcess to set
+     */
+    public void setNovalnetDirectDebitSepaGuaranteeProcess(final boolean novalnetDirectDebitSepaGuaranteeProcess) // NOSONAR
+    {
+        this.novalnetDirectDebitSepaGuaranteeProcess = novalnetDirectDebitSepaGuaranteeProcess;
+    }
+
+    /**
+     * @return novalnetInvoiceDateOfBirth
+     */
+    public String getNovalnetGuaranteedInvoiceDateOfBirth() // NOSONAR
+    {
+        return novalnetGuaranteedInvoiceDateOfBirth;
+    }
+
+    /**
+     * @return novalnetInvoiceDateOfBirth
+     */
+    public String getNovalnetGuaranteedDirectDebitSepaDateOfBirth() // NOSONAR
+    {
+        return novalnetGuaranteedDirectDebitSepaDateOfBirth;
+    }
+
+    /**
+     * @param novalnetInvoiceDateOfBirth the novalnetInvoiceDateOfBirth to set
+     */
+    public void setNovalnetGuaranteedInvoiceDateOfBirth(final String novalnetGuaranteedInvoiceDateOfBirth) // NOSONAR
+    {
+        this.novalnetGuaranteedInvoiceDateOfBirth = novalnetGuaranteedInvoiceDateOfBirth;
+    }
+
+    /**
+     * @param novalnetInvoiceDateOfBirth the novalnetInvoiceDateOfBirth to set
+     */
+    public void setNovalnetGuaranteedDirectDebitSepaDateOfBirth(final String novalnetGuaranteedDirectDebitSepaDateOfBirth) // NOSONAR
+    {
+        this.novalnetGuaranteedDirectDebitSepaDateOfBirth = novalnetGuaranteedDirectDebitSepaDateOfBirth;
+    }
+
+    /**
+     * @return novalnetInvoiceGuaranteeProcess
+     */
+    public boolean isNovalnetInvoiceGuaranteeProcess() // NOSONAR
+    {
+        return novalnetInvoiceGuaranteeProcess;
+    }
+
+    /**
+     * @param novalnetInvoiceGuaranteeProcess the novalnetInvoiceGuaranteeProcess to set
+     */
+    public void setNovalnetInvoiceGuaranteeProcess(final boolean novalnetInvoiceGuaranteeProcess) // NOSONAR
+    {
+        this.novalnetInvoiceGuaranteeProcess = novalnetInvoiceGuaranteeProcess;
     }
 
 }
